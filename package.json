@@ -1,0 +1,23 @@
+{
+  "name": "quandun-reagent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "权盾智检 - 检验科试剂管理系统网页端",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "html5-qrcode": "^2.3.8",
+    "lucide-vue-next": "^1.0.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.2.0"
+  }
+}
