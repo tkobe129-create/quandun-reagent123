@@ -1,4 +1,4 @@
-import { getDb } from './firebase.js'
+import { getDb, ensureAuth } from './firebase.js'
 import { toDbFields, fromDbFields, toStockFields, fromStockFields } from './fields.js'
 import {
   collection,
@@ -37,6 +37,7 @@ function fromDoc(store, id, data) {
 
 // 新增记录
 export async function dbAdd(storeName, data) {
+  await ensureAuth()
   const db = getDb()
   const store = resolveStore(storeName)
   const now = new Date().toISOString()
@@ -51,6 +52,7 @@ export async function dbAdd(storeName, data) {
 
 // 更新记录
 export async function dbPut(storeName, data) {
+  await ensureAuth()
   const db = getDb()
   const store = resolveStore(storeName)
   const ref = doc(db, store.table, String(data.id))
@@ -93,6 +95,7 @@ export async function dbGetAll(storeName) {
 
 // 删除记录
 export async function dbDelete(storeName, id) {
+  await ensureAuth()
   const db = getDb()
   const store = resolveStore(storeName)
   await deleteDoc(doc(db, store.table, String(id)))
