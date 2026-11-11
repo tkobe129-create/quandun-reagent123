@@ -282,19 +282,26 @@ const form = ref({
 })
 
 // 自动解析条码生成切割规则
-function autoParseBarcode() {
+function autoParseBarcode(quiet = false) {
   if (!barcodeRaw.value.trim()) return
   const raw = barcodeRaw.value.trim()
   const segments = parseBarcode(raw)
   parsedSegments.value = segments
 
-  // 自动填充 scanRule（GTIN）
+  // 自动填充 GTIN：优先取 GS1 (01) 段；无 AI 结构时，整串纯数字条码本身就是 GTIN
+  // （摄像头扫试剂盒外包装常返回裸 EAN-13/GTIN-14，如 06970150901226，以前这种
+  // 情况找不到 (01) 段，GTIN 栏一直是空的，只能手动输）
   const gtinSeg = segments.find(s => s.ai === '01')
-  if (gtinSeg) {
-    form.value.scanRule = gtinSeg.value
-    if (!form.value.code) {
-      form.value.code = gtinSeg.value
+  let gtin = gtinSeg ? gtinSeg.value : ''
+  if (!gtin) {
+    const digits = raw.replace(/[\s-]/g, '')
+    if (/^(\d{8}|\d{12}|\d{13}|\d{14})$/.test(digits)) {
+      gtin = digits
     }
+  }
+  if (gtin) {
+    form.value.scanRule = gtin
+    form.value.code = gtin
   }
 
   // 自动生成切割规则
@@ -308,12 +315,18 @@ function autoParseBarcode() {
   })
   form.value.scanSegments = rules
   scanSegmentsText.value = JSON.stringify(rules, null, 2)
-  toast.success('条码解析成功，已自动生成切割规则')
+  if (!quiet) {
+    toast.success(gtin ? '条码解析成功，GTIN 已自动填入' : '条码解析成功，已自动生成切割规则')
+  }
 }
 
 function onBarcodeRawInput() {
-  if (barcodeRaw.value.includes('(') && barcodeRaw.value.includes(')')) {
-    autoParseBarcode()
+  const v = barcodeRaw.value.trim()
+  if (v.includes('(') && v.includes(')')) {
+    autoParseBarcode(true)
+  } else if (/^(\d{8}|\d{12}|\d{13}|\d{14})$/.test(v.replace(/[\s-]/g, ''))) {
+    // 粘贴/输入完整纯数字条码时直接解析填入，不用再点“解析规则”
+    autoParseBarcode(true)
   }
 }
 
