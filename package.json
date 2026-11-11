@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.1",
     "firebase": "^13.2.0",
     "html5-qrcode": "^2.3.8",
     "lucide-vue-next": "^1.0.0",

@@ -73,7 +73,7 @@
     <!-- Loading / Empty / List state -->
     <div v-if="loading" class="state-box">
       <div class="spinner"></div>
-      <p>正在同步 Supabase 试剂数据...</p>
+      <p>正在同步 Firebase 试剂数据...</p>
     </div>
 
     <div v-else-if="filteredReagents.length === 0" class="state-box">
