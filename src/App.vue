@@ -16,9 +16,9 @@
       </div>
 
       <div class="header-right">
-        <span class="status-indicator" title="Supabase 云端服务正常运行">
+        <span class="status-indicator" title="Firebase 云端服务正常运行">
           <span class="status-dot"></span>
-          <span class="status-text">Supabase 在线</span>
+          <span class="status-text">Firebase 在线</span>
         </span>
       </div>
     </header>
